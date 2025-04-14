@@ -1,0 +1,38 @@
+{% extends 'users/base.html' %}
+{% block title %}Welcome to SmartRequest{% endblock %}
+
+{% block content %}
+<div class="text-center my-5">
+    <h1 class="display-4 fw-bold text-primary">🎓 Welcome to SmartRequest</h1>
+    <p class="lead text-muted mt-3 mb-4">
+        Your one-stop platform for submitting, tracking, and managing academic and administrative requests.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'login' %}" class="btn btn-lg btn-primary px-4">Login</a>
+        <a href="{% url 'register-student' %}" class="btn btn-lg btn-outline-secondary px-4">Register as Student</a>
+        <a href="{% url 'register-lect' %}" class="btn btn-lg btn-outline-secondary px-4">Register as Lecturer</a>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mt-5 text-center">
+    <div class="col-md-4">
+        <div class="card card-custom h-100 p-4">
+            <h4>📬 Easy Request Submission</h4>
+            <p class="text-muted">Students can quickly submit academic and administrative requests in a clear and structured format.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-custom h-100 p-4">
+            <h4>📡 Smart Routing</h4>
+            <p class="text-muted">Requests are routed intelligently to the right department or lecturer based on the type of issue.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-custom h-100 p-4">
+            <h4>📊 Live Tracking</h4>
+            <p class="text-muted">Students and staff can monitor the status of every request in real time with built-in notifications.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
