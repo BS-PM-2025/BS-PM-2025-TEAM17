@@ -202,10 +202,13 @@
                             {% endif %}
                         </td>
                         <td>
-                            <!-- To-Do ELIAS:DElETE USERS-->
                             <!-- Delete -->
                             <!-- Delete User Form -->
-                            
+                            <form method="POST" action="{% url 'delete_user' %}" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
 
                             <!-- Change Role -->
                             <form method="POST" action="{% url 'change_user_role' %}" style="display:inline;">

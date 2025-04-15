@@ -104,11 +104,16 @@ def add_user(request):
         messages.success(request, 'User created successfully.')
     return redirect('dashboard')
 
-# to -do : Elias
+# delete a user
 @require_POST
 def delete_user(request):
-    # to -do : Elias
-    
+    user_id = request.POST.get('user_id')
+    try:
+        user = User.objects.get(id=user_id)
+        user.delete()
+        messages.success(request, 'User deleted.')
+    except User.DoesNotExist:
+        messages.error(request, 'User not found.')
     return redirect('dashboard')
 
 @require_POST

@@ -67,3 +67,50 @@ class LogoutUserTest(TestCase):
 
         # Check that the user is redirected to the login page
         self.assertRedirects(response, reverse('login'), msg_prefix="User not logged in should still be redirected to login.")
+
+
+
+# user deletion tests
+class DeleteUserViewTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.dashboard_url = reverse('dashboard')  # Assuming this is the redirect target
+        # Create a user to be deleted
+        self.user_to_delete = User.objects.create_user(
+            email='testdelete@example.com',
+            password='testpass123',
+            username='testdelete@example.com'
+        )
+
+    def test_delete_existing_user(self):
+        response = self.client.post(reverse('delete_user'), {
+            'user_id': self.user_to_delete.id
+        }, follow=True)
+
+        # Check user is deleted
+        with self.assertRaises(User.DoesNotExist):
+            User.objects.get(id=self.user_to_delete.id)
+
+        # Check success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("User deleted." in str(m) for m in messages))
+
+        # Check redirection
+        self.assertRedirects(response, self.dashboard_url)
+
+    def test_delete_nonexistent_user(self):
+        non_existent_id = 9999
+        response = self.client.post(reverse('delete_user'), {
+            'user_id': non_existent_id
+        }, follow=True)
+
+        # Ensure user wasn't deleted (already didn't exist)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("User not found." in str(m) for m in messages))
+
+        # Check redirection
+        self.assertRedirects(response, self.dashboard_url)
+
+    def test_delete_user_with_get_request(self):
+        response = self.client.get(reverse('delete_user'))
+        self.assertEqual(response.status_code, 405)  # Method Not Allowed
