@@ -1,10 +1,10 @@
 pipeline {
     agent any
-
+    
     environment {
         VENV_DIR = 'venv'
     }
-
+    
     stages {
         stage('Setup Python Env') {
             steps {
@@ -17,14 +17,32 @@ pipeline {
                 '''
             }
         }
-
+        
         stage('Run Tests') {
             steps {
                 sh '''
-                    source $VENV_DIR/bin/activate
                     echo "Running tests..."
+                    source $VENV_DIR/bin/activate
+                    
+                    # Display current directory and files for debugging
+                    echo "Current directory: $(pwd)"
+                    ls -la
+                    
+                    # Run the tests
                     python manage.py test
                 '''
+            }
+        }
+        
+        post {
+            always {
+                echo "Build finished"
+            }
+            success {
+                echo "Tests completed successfully"
+            }
+            failure {
+                echo "Tests failed"
             }
         }
     }
