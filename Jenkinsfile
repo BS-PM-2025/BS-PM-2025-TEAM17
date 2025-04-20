@@ -22,6 +22,7 @@ pipeline {
             steps {
                 sh '''
                     source $VENV_DIR/bin/activate
+                    echo "Running tests..."
                     python manage.py test
                 '''
             }
