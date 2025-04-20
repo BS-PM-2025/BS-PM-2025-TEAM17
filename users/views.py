@@ -1,6 +1,9 @@
+from multiprocessing.connection import Client
+from unittest import TestCase
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
+from django.urls import reverse
 from .models import User
 from .form import RegisterUserForm
 from django.contrib.auth.hashers import make_password
@@ -98,6 +101,40 @@ def logout_user(request):
     logout(request)
     messages.info(request, 'your session has ended')
     return redirect('login')
+
+
+class LecturerLogoutTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.lecturer = User.objects.create_user(
+            email='lecturer@example.com',
+            username='lecturer@example.com',
+            password='testpass123',
+            is_lect=True
+        )
+        self.login_url = reverse('login')
+        self.logout_url = reverse('logout_user')  # change if your URL pattern name is different
+
+    def test_lecturer_logout(self):
+        # Log in the lecturer
+        login_successful = self.client.login(
+            username='lecturer@example.com',
+            password='testpass123'
+        )
+        self.assertTrue(login_successful)
+
+        # Log out
+        response = self.client.get(self.logout_url, follow=True)
+
+        # Ensure user is logged out
+        self.assertNotIn('_auth_user_id', self.client.session)
+
+        # Ensure redirection to login
+        self.assertRedirects(response, self.login_url)
+
+        # Confirm the logout message was set
+        messages = list(response.context['messages'])
+        self.assertTrue(any("session has ended" in str(msg) for msg in messages))
 
 
 @require_POST
