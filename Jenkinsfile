@@ -33,17 +33,17 @@ pipeline {
                 '''
             }
         }
-        
-        post {
-            always {
-                echo "Build finished"
-            }
-            success {
-                echo "Tests completed successfully"
-            }
-            failure {
-                echo "Tests failed"
-            }
+    }
+    
+    post {
+        always {
+            echo "Build finished"
+        }
+        success {
+            echo "Tests completed successfully"
+        }
+        failure {
+            echo "Tests failed"
         }
     }
 }
