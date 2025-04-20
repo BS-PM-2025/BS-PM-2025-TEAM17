@@ -78,8 +78,25 @@ def login_user(request):
 ##user logout(to-do : Nashaat)
 ##user can logout so he end his session
 def logout_user(request):
+    """
+    Log out the currently authenticated user from the system.
+    
+    This function handles logout requests for all user types including students 
+    and secretaries. When called, it:
+    - Terminates the user's active session
+    - Displays a confirmation message
+    - Redirects to the login page
+    
+    Both students and secretaries use this same function to end their sessions safely.
+    
+    Args:
+        request: The HTTP request object containing session information
+        
+    Returns:
+        HttpResponseRedirect to the login page
+    """
     logout(request)
-    messages.info(request,'your session has ended')
+    messages.info(request, 'your session has ended')
     return redirect('login')
 
 
