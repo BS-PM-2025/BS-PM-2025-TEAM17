@@ -20,17 +20,8 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                sh '''
-                    echo "Running tests..."
-                    source $VENV_DIR/bin/activate
-                    
-                    # Display current directory and files for debugging
-                    echo "Current directory: $(pwd)"
-                    ls -la
-                    
-                    # Run the tests
-                    python manage.py test
-                '''
+                echo 'Running tests...'
+                sh 'python manage.py test'
             }
         }
     }
